@@ -1,0 +1,14 @@
+{
+  "name": "promise-impl-example",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Ramesh Ramalingam <rrameshbtech@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "test": "mocha *.test.js"
+  },
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "mocha": "^6.1.4"
+  }
+}
