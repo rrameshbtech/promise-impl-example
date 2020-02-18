@@ -1,11 +1,13 @@
 const { expect } = require("chai");
 const MyPromise = require("./promise");
 
+const DELAY = 10;
+
 describe("MyPromise", () => {
-  describe("then", () => {
-    it("Should call fullfilment listener when resolved.", done => {
+  describe("on success", () => {
+    it("should call fullfillment handler", done => {
       const promise = new MyPromise(resolve => {
-        setTimeout(() => resolve(), 500);
+        setTimeout(() => resolve(), DELAY);
       });
 
       promise.then(() => {
@@ -14,9 +16,9 @@ describe("MyPromise", () => {
       });
     });
 
-    it("Should call fullfilment listener with arguments when resolved with arguments.", done => {
+    it("should call fullfillment handler with arguments.", done => {
       const promise = new MyPromise(resolve => {
-        setTimeout(() => resolve("Hai, then block"), 500);
+        setTimeout(() => resolve("Hai, then block"), DELAY);
       });
 
       promise.then(result => {
@@ -24,34 +26,12 @@ describe("MyPromise", () => {
         done();
       });
     });
-
-    it("Should call onRejected when rejected.", done => {
-      const promise = new MyPromise((resolve, reject) => {
-        setTimeout(() => reject(), 500);
-      });
-
-      promise.then(undefined, () => {
-        expect(false).to.be.false;
-        done();
-      });
-    });
-
-    it("Should call onRejected when error in promise handler", done => {
-      const promise = new MyPromise((resolve, reject) => {
-        throw new Error("omg");
-      });
-
-      promise.then(undefined, error => {
-        expect(error.message).to.equal("omg");
-        done();
-      });
-    });
   });
 
-  describe("catch", () => {
-    it("Should call catch listener when rejected.", done => {
+  describe("on failure", () => {
+    it("should call catch listener if available", done => {
       const promise = new MyPromise((resolve, reject) => {
-        setTimeout(() => reject(), 500);
+        setTimeout(() => reject(), DELAY);
       });
 
       promise.catch(() => {
@@ -60,13 +40,35 @@ describe("MyPromise", () => {
       });
     });
 
-    it("Should call catch listener with arguments when reject with arguments.", done => {
+    it("should call catch listener with arguments with arguments", done => {
       const promise = new MyPromise((resolve, reject) => {
-        setTimeout(() => reject("Hai, catch block"), 500);
+        setTimeout(() => reject("Hai, catch block"), DELAY);
       });
 
       promise.catch(result => {
         expect(result).to.equal("Hai, catch block");
+        done();
+      });
+    });
+
+    it("should call rejection handler", done => {
+      const promise = new MyPromise((resolve, reject) => {
+        setTimeout(() => reject(), DELAY);
+      });
+
+      promise.then(undefined, () => {
+        expect(false).to.be.false;
+        done();
+      });
+    });
+
+    it("Should call rejection handler on error", done => {
+      const promise = new MyPromise((resolve, reject) => {
+        throw new Error("omg");
+      });
+
+      promise.then(undefined, error => {
+        expect(error.message).to.equal("omg");
         done();
       });
     });
